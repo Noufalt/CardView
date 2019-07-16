@@ -5,6 +5,7 @@ using UIKit;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.iOS;
 using PanCardView.Enums;
+using static Xamarin.Forms.Platform.iOS.Platform;
 
 [assembly: ExportRenderer(typeof(CardsView), typeof(CardsViewRenderer))]
 namespace PanCardView.iOS
@@ -43,8 +44,13 @@ namespace PanCardView.iOS
         protected override void OnElementChanged(ElementChangedEventArgs<CardsView> e)
         {
             base.OnElementChanged(e);
+            if(e.OldElement != null)
+            {
+                e.OldElement.PlatformSpecificSwipeHandled -= OnPlatformSpecificSwipeHandled;
+            }
             if (e.NewElement != null)
             {
+                e.NewElement.PlatformSpecificSwipeHandled += OnPlatformSpecificSwipeHandled;
                 SetSwipeGestures();
             }
         }
@@ -74,6 +80,22 @@ namespace PanCardView.iOS
                                         : ItemSwipeDirection.Down;
 
             Element?.OnSwiped(swipeDirection);
+        }
+
+        private void OnPlatformSpecificSwipeHandled(bool isSideSwipe, bool isNextSwipe)
+        {
+            BeginAnimations(nameof(CardsView));
+            SetAnimationDuration(PlatformConfiguration.iOSSpecific.CardsView.GetAutoAnimationDuration(Element).TotalSeconds);
+            var transitionType = isSideSwipe
+                ? isNextSwipe
+                    ? UIViewAnimationTransition.FlipFromLeft
+                    : UIViewAnimationTransition.FlipFromRight
+                : isNextSwipe
+                    ? UIViewAnimationTransition.CurlUp
+                    : UIViewAnimationTransition.CurlDown;
+
+            SetAnimationTransition(transitionType, this, true);
+            CommitAnimations();
         }
     }
 }

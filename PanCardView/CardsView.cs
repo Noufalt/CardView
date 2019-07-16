@@ -153,6 +153,9 @@ namespace PanCardView
             remove => _viewsInUseSet.CollectionChanged -= value;
         }
 
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public event Action<bool, bool> PlatformSpecificSwipeHandled;
+
         private readonly object _childLocker = new object();
         private readonly object _viewsInUseLocker = new object();
         private readonly object _setCurrentViewLocker = new object();
@@ -196,6 +199,8 @@ namespace PanCardView
         }
 
         private bool ShouldIgnoreSetCurrentView { get; set; }
+
+        internal bool? IsSideSwipe { get; set; }
 
         private bool ShouldSetIndexAfterPan { get; set; }
 
@@ -491,9 +496,11 @@ namespace PanCardView
         {
         }
 
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public void OnPanUpdated(object sender, PanUpdatedEventArgs e)
-        => OnPanUpdated(e);
+            => OnPanUpdated(e);
 
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public void OnPanUpdated(PanUpdatedEventArgs e)
         {
             if (ItemsCount <= 0 || !IsPanInteractionEnabled)
@@ -521,6 +528,7 @@ namespace PanCardView
             }
         }
 
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public void OnSwiped(ItemSwipeDirection swipeDirection)
         {
             if (!IsUserInteractionEnabled || !_isPanEndRequested || !CheckInteractionDelay())
@@ -530,7 +538,9 @@ namespace PanCardView
             _lastPanTime = DateTime.UtcNow;
 
             var oldIndex = SelectedIndex;
-            if ((int)swipeDirection < 2)
+
+            var isPlatformSpecificHandled = PlatformConfiguration.iOSSpecific.CardsView.HandleSwipe(this, swipeDirection);
+            if (!isPlatformSpecificHandled && (int)swipeDirection < 2)
             {
                 var isLeftSwiped = swipeDirection == ItemSwipeDirection.Left;
                 var haveItems = (isLeftSwiped && NextViews.Any()) || (!isLeftSwiped && PrevViews.Any());
@@ -558,9 +568,16 @@ namespace PanCardView
         {
             var isHardSet = CheckIsHardSetCurrentView();
 
-            if (!isHardSet && (!_hasRenderer || Parent == null || await TryAutoNavigate()))
+            try
             {
-                return;
+                if (!isHardSet && (!_hasRenderer || Parent == null || await TryAutoNavigate()))
+                {
+                    return;
+                }
+            }
+            finally
+            {
+                IsSideSwipe = null;
             }
 
             lock (_setCurrentViewLocker)
@@ -718,12 +735,25 @@ namespace PanCardView
 
             var animationId = Guid.NewGuid();
             StartAutoNavigation(views, animationId, animationDirection);
-            await Task.Delay(5);
-            var autoNavigationTask = Task.WhenAll(
-                BackViewProcessor.HandleAutoNavigate(CurrentBackViews, this, realDirection, CurrentInactiveBackViews),
-                FrontViewProcessor.HandleAutoNavigate(Enumerable.Repeat(CurrentView, 1), this, realDirection, Enumerable.Empty<View>()));
 
-            await autoNavigationTask;
+            var specificType = PlatformConfiguration.iOSSpecific.CardsView.GetAutoAnimationType(this);
+            if (specificType == PlatformConfiguration.iOSSpecific.AutoAnimationType.FromProcessors)
+            {
+                await Task.Delay(5);
+                var autoNavigationTask = Task.WhenAll(
+                    BackViewProcessor.HandleAutoNavigate(CurrentBackViews, this, realDirection, CurrentInactiveBackViews),
+                    FrontViewProcessor.HandleAutoNavigate(Enumerable.Repeat(CurrentView, 1), this, realDirection, Enumerable.Empty<View>()));
+                await autoNavigationTask;
+            }
+            else
+            {
+                var isSideSwipe = IsSideSwipe ?? !specificType.HasFlag(PlatformConfiguration.iOSSpecific.AutoAnimationType.Curl);
+                PlatformSpecificSwipeHandled?.Invoke(isSideSwipe, realDirection == AnimationDirection.Next);
+                FrontViewProcessor.HandleInitView(Enumerable.Repeat(CurrentView, 1), this, AnimationDirection.Current);
+                RaiseChild(CurrentView);
+                await Task.Delay(PlatformConfiguration.iOSSpecific.CardsView.GetAutoAnimationDuration(this));
+                RemoveUnprocessingChildren();
+            }
 
             EndAutoNavigation(views, animationId, animationDirection);
 
@@ -845,7 +875,7 @@ namespace PanCardView
         }
 
         private void StoreParentSize(double width, double height)
-        => _parentSize = new Size(width, height);
+            => _parentSize = new Size(width, height);
 
         private void SetPanGesture(bool isForceRemove = false)
         {
@@ -1249,7 +1279,7 @@ namespace PanCardView
         }
 
         private void ResetActiveInactiveBackViews(double diff)
-        => ResetActiveInactiveBackViews(diff > 0 ? AnimationDirection.Prev : AnimationDirection.Next);
+            => ResetActiveInactiveBackViews(diff > 0 ? AnimationDirection.Prev : AnimationDirection.Next);
 
         private void SwapViews(bool isNext)
         {
@@ -1268,7 +1298,7 @@ namespace PanCardView
         }
 
         private void SwapViews(AnimationDirection animationDirection)
-        => SwapViews(animationDirection == AnimationDirection.Next);
+            => SwapViews(animationDirection == AnimationDirection.Next);
 
         private IEnumerable<View> InitViews(ICardProcessor processor, AnimationDirection animationDirection, IEnumerable<View> bookedViews, params int[] indeces)
         {
@@ -1399,10 +1429,10 @@ namespace PanCardView
         }
 
         private bool CheckContextAssigned(View view)
-        => view?.Behaviors.Contains(_contextAssignedBehavior) ?? false;
+            => view?.Behaviors.Contains(_contextAssignedBehavior) ?? false;
 
         private object GetItem(View view)
-        => CheckContextAssigned(view)
+            => CheckContextAssigned(view)
             ? view.BindingContext
             : view;
 
@@ -1643,10 +1673,10 @@ namespace PanCardView
         }
 
         private bool CheckIsProcessingView(View view)
-        => view == CurrentView || NextViews.Contains(view) || PrevViews.Contains(view);
+            => view == CurrentView || NextViews.Contains(view) || PrevViews.Contains(view);
 
         private bool CheckIndexValid(int index)
-        => index >= 0 && index < ItemsCount;
+            => index >= 0 && index < ItemsCount;
 
         private void AddRangeViewsInUse(Guid gestureId)
         {
