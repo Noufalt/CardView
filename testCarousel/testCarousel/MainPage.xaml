@@ -1,0 +1,279 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ContentPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    x:Class="testCarousel.MainPage"
+    FlowDirection="RightToLeft"
+    xmlns:cards="clr-namespace:PanCardView;assembly=PanCardView"
+    xmlns:proc="clr-namespace:PanCardView.Processors;assembly=PanCardView">
+    <ScrollView>
+        <StackLayout>
+            <!-- Place new controls here -->
+            <Label Text="Special Offers" />
+            <cards:CardsView HeightRequest="350"
+                             IsCyclical="false"
+                             x:Name="corouselView">
+                <cards:CardsView.ItemsSource>
+                    <x:Array Type="{x:Type x:String}">
+                        <x:String>Baboon</x:String>
+                        <x:String>Capuchin Monkey</x:String>
+                        <x:String>Blue Monkey</x:String>
+                    </x:Array>
+                </cards:CardsView.ItemsSource>
+                <x:Arguments>
+                    <proc:BaseCarouselFrontViewProcessor ScaleFactor="0.5"
+                                                         OpacityFactor="0"
+                                                         RotationFactor="0.1" />
+                    <proc:BaseCarouselBackViewProcessor ScaleFactor="0.5"
+                                                        OpacityFactor="0"
+                                                        RotationFactor="0.1" />
+                </x:Arguments>
+                <cards:CardsView.ItemTemplate>
+                    <DataTemplate>
+                        <StackLayout x:Name="myView"
+                                     Spacing="5">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <Frame
+                                    HorizontalOptions="FillAndExpand"
+                                    VerticalOptions="FillAndExpand"
+                                    Padding="0"
+                                    CornerRadius="10"
+                                    BackgroundColor="White"
+                                    Visual="Material"
+                                    Grid.Row="0">
+                                    <Image
+                                        Aspect="AspectFill"
+                                        HeightRequest="350"
+                                        HorizontalOptions="FillAndExpand"
+                                        VerticalOptions="FillAndExpand"
+                                        Source="tempToDelete.png" />
+                                </Frame>
+                                <Grid Grid.Row="0">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <Grid Grid.Row="0"
+                                          Margin="10,10,0,0">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="20*" />
+                                            <ColumnDefinition Width="80*" />
+                                        </Grid.ColumnDefinitions>
+                                        <Label Text="{Binding .}"
+                                               Grid.Column="1"
+                                               Grid.Row="0"
+                                               TextColor="White"
+                                               Margin="0,5,0,0"
+                                               VerticalOptions="Center" />
+                                        <Label Text="March 23"
+                                               Grid.Column="1"
+                                               Grid.Row="1"
+                                               TextColor="White"
+                                               Margin="0,5,0,0"
+                                               VerticalOptions="Center" />
+                                    </Grid>
+                                    <BoxView Grid.Row="1"
+                                             HeightRequest=".5"
+                                             Margin="20,30,20,0"
+                                             BackgroundColor="White" />
+                                    <StackLayout Grid.Row="2"
+                                                 Padding="16,20,0,0"
+                                                 Spacing="20">
+                                        <Label
+                                            Text="{Binding .}"
+                                            TextColor="White" />
+                                        <Label Text="{Binding Text}"
+                                               TextColor="White" />
+                                    </StackLayout>
+                                </Grid>
+                            </Grid>
+                        </StackLayout>
+                    </DataTemplate>
+                </cards:CardsView.ItemTemplate>
+            </cards:CardsView>
+
+            <Label Text="Latest Offers" />
+            <cards:CarouselView HeightRequest="400"
+                                IsCyclical="false"
+                                x:Name="corouselView2">
+                <cards:CardsView.ItemsSource>
+                    <x:Array Type="{x:Type x:String}">
+                        <x:String>Baboon</x:String>
+                        <x:String>Capuchin Monkey</x:String>
+                        <x:String>Blue Monkey</x:String>
+                    </x:Array>
+                </cards:CardsView.ItemsSource>
+                <cards:CardsView.ItemTemplate>
+                    <DataTemplate>
+                        <StackLayout x:Name="myView"
+                                     Spacing="5">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <Frame
+                                    HorizontalOptions="FillAndExpand"
+                                    VerticalOptions="FillAndExpand"
+                                    Padding="0"
+                                    CornerRadius="10"
+                                    BackgroundColor="White"
+                                    Visual="Material"
+                                    Grid.Row="0">
+                                    <Image
+                                        Aspect="AspectFill"
+                                        HeightRequest="400"
+                                        HorizontalOptions="FillAndExpand"
+                                        VerticalOptions="FillAndExpand"
+                                        Source="tempToDelete.png" />
+                                </Frame>
+                                <Grid Grid.Row="0">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <Grid Grid.Row="0"
+                                          Margin="10,10,0,0">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="20*" />
+                                            <ColumnDefinition Width="80*" />
+                                        </Grid.ColumnDefinitions>
+                                        <Label Text="{Binding .}"
+                                               Grid.Column="1"
+                                               Grid.Row="0"
+                                               TextColor="White"
+                                               Margin="0,5,0,0"
+                                               VerticalOptions="Center" />
+                                        <Label Text="March 23"
+                                               Grid.Column="1"
+                                               Grid.Row="1"
+                                               TextColor="White"
+                                               Margin="0,5,0,0"
+                                               VerticalOptions="Center" />
+                                    </Grid>
+                                    <BoxView Grid.Row="1"
+                                             HeightRequest=".5"
+                                             Margin="20,30,20,0"
+                                             BackgroundColor="White" />
+                                    <StackLayout Grid.Row="2"
+                                                 Padding="16,20,0,0"
+                                                 Spacing="20">
+                                        <Label
+                                            Text="{Binding .}"
+                                            TextColor="White" />
+                                        <Label Text="{Binding Text}"
+                                               TextColor="White" />
+                                    </StackLayout>
+                                </Grid>
+                            </Grid>
+                        </StackLayout>
+                    </DataTemplate>
+                </cards:CardsView.ItemTemplate>
+            </cards:CarouselView>
+
+            <Label Text="Funding" />
+            <cards:CubeView HeightRequest="400"
+                            IsCyclical="false"
+                            x:Name="corouselView1">
+                <cards:CardsView.ItemsSource>
+                    <x:Array Type="{x:Type x:String}">
+                        <x:String>Baboon</x:String>
+                        <x:String>Capuchin Monkey</x:String>
+                        <x:String>Blue Monkey</x:String>
+                    </x:Array>
+                </cards:CardsView.ItemsSource>
+                <cards:CardsView.ItemTemplate>
+                    <DataTemplate>
+                        <StackLayout x:Name="myView"
+                                     Spacing="5">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <Frame
+                                    HorizontalOptions="FillAndExpand"
+                                    VerticalOptions="FillAndExpand"
+                                    Padding="0"
+                                    CornerRadius="10"
+                                    BackgroundColor="White"
+                                    Visual="Material"
+                                    Grid.Row="0">
+                                    <Image
+                                        Aspect="AspectFill"
+                                        HeightRequest="400"
+                                        HorizontalOptions="FillAndExpand"
+                                        VerticalOptions="FillAndExpand"
+                                        Source="tempToDelete.png" />
+                                </Frame>
+                                <Grid Grid.Row="0">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <Grid Grid.Row="0"
+                                          Margin="10,10,0,0">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="20*" />
+                                            <ColumnDefinition Width="80*" />
+                                        </Grid.ColumnDefinitions>
+                                        <Label Text="{Binding .}"
+                                               Grid.Column="1"
+                                               Grid.Row="0"
+                                               TextColor="White"
+                                               Margin="0,5,0,0"
+                                               VerticalOptions="Center" />
+                                        <Label Text="March 23"
+                                               Grid.Column="1"
+                                               Grid.Row="1"
+                                               TextColor="White"
+                                               Margin="0,5,0,0"
+                                               VerticalOptions="Center" />
+                                    </Grid>
+                                    <BoxView Grid.Row="1"
+                                             HeightRequest=".5"
+                                             Margin="20,30,20,0"
+                                             BackgroundColor="White" />
+                                    <StackLayout Grid.Row="2"
+                                                 Padding="16,20,0,0"
+                                                 Spacing="20">
+                                        <Label
+                                            Text="{Binding .}"
+                                            TextColor="White" />
+                                        <Label Text="{Binding Text}"
+                                               TextColor="White" />
+                                    </StackLayout>
+                                </Grid>
+                            </Grid>
+                        </StackLayout>
+                    </DataTemplate>
+                </cards:CardsView.ItemTemplate>
+            </cards:CubeView>
+        </StackLayout>
+    </ScrollView>
+</ContentPage>
