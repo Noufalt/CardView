@@ -14,6 +14,7 @@
             <!-- Place new controls here -->
             <Label Text="Special Offers" />
             <cards:CardsView HeightRequest="350"
+                             OppositePanDirectionDisablingThreshold="1"
                              IsCyclical="false"
                              x:Name="corouselView">
                 <cards:CardsView.ItemsSource>
@@ -107,6 +108,7 @@
 
             <Label Text="Latest Offers" />
             <cards:CarouselView HeightRequest="400"
+                                OppositePanDirectionDisablingThreshold="1"
                                 IsCyclical="false"
                                 x:Name="corouselView2">
                 <cards:CardsView.ItemsSource>
@@ -192,6 +194,7 @@
 
             <Label Text="Funding" />
             <cards:CubeView HeightRequest="400"
+                            OppositePanDirectionDisablingThreshold="1"
                             IsCyclical="false"
                             x:Name="corouselView1">
                 <cards:CardsView.ItemsSource>
