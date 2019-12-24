@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Foundation;
+using PanCardView.iOS;
 using UIKit;
 
 namespace testCarousel.iOS
@@ -26,6 +27,7 @@ namespace testCarousel.iOS
             global::Xamarin.Forms.Forms.SetFlags("CarouselView_Experimental");
 
             global::Xamarin.Forms.Forms.Init();
+            CardsViewRenderer.Preserve();
             LoadApplication(new App());
 
             return base.FinishedLaunching(app, options);
