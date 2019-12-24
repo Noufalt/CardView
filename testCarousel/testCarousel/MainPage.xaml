@@ -8,103 +8,71 @@
     x:Class="testCarousel.MainPage"
     FlowDirection="RightToLeft"
     xmlns:cards="clr-namespace:PanCardView;assembly=PanCardView"
-    xmlns:proc="clr-namespace:PanCardView.Processors;assembly=PanCardView">
+    xmlns:proc="clr-namespace:PanCardView.Processors;assembly=PanCardView"
+    BackgroundColor="Gray">
     <ScrollView>
         <StackLayout>
             <!-- Place new controls here -->
             <Label Text="Special Offers" />
-            <cards:CardsView HeightRequest="350"
-                             OppositePanDirectionDisablingThreshold="1"
-                             IsCyclical="false"
-                             x:Name="corouselView">
-                <cards:CardsView.ItemsSource>
+            <CarouselView
+                x:Name="carouselView"
+                HeightRequest="330"
+                PeekAreaInsets="90"
+                HorizontalScrollBarVisibility="Never"
+                Position="{Binding InitialPosition}">
+                <CarouselView.ItemsSource>
                     <x:Array Type="{x:Type x:String}">
                         <x:String>Baboon</x:String>
                         <x:String>Capuchin Monkey</x:String>
                         <x:String>Blue Monkey</x:String>
                     </x:Array>
-                </cards:CardsView.ItemsSource>
-                <x:Arguments>
-                    <proc:BaseCarouselFrontViewProcessor ScaleFactor="0.5"
-                                                         OpacityFactor="0"
-                                                         RotationFactor="0.1" />
-                    <proc:BaseCarouselBackViewProcessor ScaleFactor="0.5"
-                                                        OpacityFactor="0"
-                                                        RotationFactor="0.1" />
-                </x:Arguments>
-                <cards:CardsView.ItemTemplate>
+                </CarouselView.ItemsSource>
+                <CarouselView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Horizontal"
+                                       ItemSpacing="30" />
+                </CarouselView.ItemsLayout>
+                <CarouselView.ItemTemplate>
                     <DataTemplate>
                         <StackLayout x:Name="myView"
-                                     Spacing="5">
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                </Grid.RowDefinitions>
-                                <Frame
-                                    HorizontalOptions="FillAndExpand"
-                                    VerticalOptions="FillAndExpand"
-                                    Padding="0"
-                                    CornerRadius="10"
-                                    BackgroundColor="White"
-                                    Visual="Material"
-                                    Grid.Row="0">
+                                     Spacing="0">
+                            <Frame
+                                IsClippedToBounds="True"
+                                Padding="0"
+                                Margin="0"
+                                CornerRadius="16"
+                                Visual="Material">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="50*" />
+                                        <RowDefinition Height="50*" />
+                                    </Grid.RowDefinitions>
                                     <Image
+                                        Grid.Row="0"
                                         Aspect="AspectFill"
-                                        HeightRequest="350"
+                                        HeightRequest="300"
+                                        WidthRequest="200"
                                         HorizontalOptions="FillAndExpand"
                                         VerticalOptions="FillAndExpand"
-                                        Source="tempToDelete.png" />
-                                </Frame>
-                                <Grid Grid.Row="0">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="Auto" />
-                                    </Grid.RowDefinitions>
-                                    <Grid Grid.Row="0"
-                                          Margin="10,10,0,0">
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="Auto" />
-                                            <RowDefinition Height="Auto" />
-                                        </Grid.RowDefinitions>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="20*" />
-                                            <ColumnDefinition Width="80*" />
-                                        </Grid.ColumnDefinitions>
-                                        <Label Text="{Binding .}"
-                                               Grid.Column="1"
-                                               Grid.Row="0"
-                                               TextColor="White"
+                                        Source="tempToDelete.png"
+                                        Visual="Default" />
+                                    <StackLayout BackgroundColor="White"
+                                                 VerticalOptions="FillAndExpand"
+                                                 Grid.Row="1">
+                                        <Label Text="Test Offer"
+                                               TextColor="Black"
                                                Margin="0,5,0,0"
                                                VerticalOptions="Center" />
-                                        <Label Text="March 23"
-                                               Grid.Column="1"
-                                               Grid.Row="1"
-                                               TextColor="White"
+                                        <Label Text="10 % Discount"
+                                               TextColor="Black"
                                                Margin="0,5,0,0"
                                                VerticalOptions="Center" />
-                                    </Grid>
-                                    <BoxView Grid.Row="1"
-                                             HeightRequest=".5"
-                                             Margin="20,30,20,0"
-                                             BackgroundColor="White" />
-                                    <StackLayout Grid.Row="2"
-                                                 Padding="16,20,0,0"
-                                                 Spacing="20">
-                                        <Label
-                                            Text="{Binding .}"
-                                            TextColor="White" />
-                                        <Label Text="{Binding Text}"
-                                               TextColor="White" />
                                     </StackLayout>
                                 </Grid>
-                            </Grid>
+                            </Frame>
                         </StackLayout>
                     </DataTemplate>
-                </cards:CardsView.ItemTemplate>
-            </cards:CardsView>
+                </CarouselView.ItemTemplate>
+            </CarouselView>
 
             <Label Text="Latest Offers" />
             <cards:CarouselView HeightRequest="400"
